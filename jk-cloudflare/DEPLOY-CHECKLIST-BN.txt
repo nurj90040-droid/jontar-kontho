@@ -1,0 +1,18 @@
+Cloudflare deploy checklist
+[ ] ZIP extract করা হয়েছে
+[ ] GitHub repository-তে public/, functions/, migrations/, wrangler.toml আপলোড
+[ ] Cloudflare Pages project deploy
+[ ] D1 database তৈরি
+[ ] migrations/0001_init.sql চালানো
+[ ] Private R2 bucket তৈরি
+[ ] Pages binding DB যুক্ত
+[ ] Pages binding EVIDENCE যুক্ত
+[ ] ADMIN_PASSWORD Secret যুক্ত
+[ ] SESSION_SECRET Secret যুক্ত
+[ ] Redeploy
+[ ] /admin.html-এ login পরীক্ষা
+[ ] test complaint submit
+[ ] complaint pending থেকে verified করা
+[ ] public page-এ verified complaint দেখা
+[ ] private evidence শুধুমাত্র admin login-এ দেখা
+[ ] protectbd.000.bd DNS/custom domain পরীক্ষা

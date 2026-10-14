@@ -1,0 +1,22 @@
+<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>জনতার কণ্ঠ — Admin</title><link rel="stylesheet" href="/admin.css"></head>
+<body><header><b>🇧🇩 জনতার কণ্ঠ</b><span>Moderator Dashboard</span><button id="logout" class="danger hidden">Logout</button></header>
+<main>
+<section id="login" class="card"><h1>Admin Login</h1><p>শুধু স্থানীয় moderator-এর জন্য।</p><form id="loginForm"><input id="password" type="password" placeholder="Admin password" required><button>Login</button><div id="loginMsg"></div></form></section>
+<section id="dashboard" class="hidden">
+<div class="stats"><div><b id="pending">0</b><span>Pending</span></div><div><b id="reviewing">0</b><span>Reviewing</span></div><div><b id="verified">0</b><span>Verified</span></div><div><b id="rejected">0</b><span>Rejected</span></div><div><b id="sent">0</b><span>Sent</span></div></div>
+<div class="toolbar"><h1>অভিযোগ যাচাই</h1><select id="filter"><option value="">সব</option><option>pending</option><option>reviewing</option><option>verified</option><option>rejected</option><option>authority_ready</option><option>sent</option></select></div>
+<div id="list"></div></section></main>
+<script>
+const $=s=>document.querySelector(s), esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+async function api(url,opt){const r=await fetch(url,opt);const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.message||"Request failed");return d}
+function showLogin(){ $("#login").classList.remove("hidden");$("#dashboard").classList.add("hidden");$("#logout").classList.add("hidden")}
+function showDash(){ $("#login").classList.add("hidden");$("#dashboard").classList.remove("hidden");$("#logout").classList.remove("hidden");load()}
+async function check(){try{await api("/api/admin/me");showDash()}catch{showLogin()}}
+$("#loginForm").onsubmit=async e=>{e.preventDefault();try{await api("/api/admin/login",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({password:$("#password").value})});$("#loginMsg").textContent="Login successful";showDash()}catch(x){$("#loginMsg").textContent=x.message}};
+$("#logout").onclick=async()=>{await api("/api/admin/logout",{method:"POST"});showLogin()};
+$("#filter").onchange=load;
+async function load(){try{const q=$("#filter").value?("?status="+encodeURIComponent($("#filter").value)):"",a=await api("/api/admin/complaints"+q);const all=await api("/api/admin/complaints");["pending","reviewing","verified","rejected","sent"].forEach(s=>$("#"+s).textContent=all.filter(x=>x.status===s).length);$("#list").innerHTML=a.map(x=>card(x)).join("")||"<div class='card'>কোনো অভিযোগ নেই।</div>"}catch(e){showLogin()}}
+function card(x){const ev=(x.evidence||[]).map(f=>`<a target="_blank" href="/api/admin/evidence/${x.id}/${encodeURIComponent(f.path)}">${esc(f.name)} (${Math.round(f.size/1024)} KB)</a>`).join(" · ");return `<article class="card complaint"><div class="top"><div><b>${esc(x.tracking_code)}</b><span class="tag">${esc(x.status)}</span></div><small>${esc(x.created_at)}</small></div><h2>${esc(x.category)} — ${esc(x.district)}</h2><p><b>অফিস:</b> ${esc(x.office||"উল্লেখ নেই")}</p><p class="body">${esc(x.body)}</p>${x.contact?`<p><b>Private contact:</b> ${esc(x.contact)}</p>`:""}${ev?`<div class="evidence"><b>Evidence:</b><br>${ev}</div>`:""}<textarea id="note-${x.id}" placeholder="Moderator note">${esc(x.moderation_note||"")}</textarea><div class="actions"><button onclick="setStatus('${x.id}','reviewing')">Review</button><button onclick="setStatus('${x.id}','verified')">✓ Verify</button><button onclick="setStatus('${x.id}','rejected')" class="danger">Reject</button>${x.status==="verified"&&x.authority_consent?`<button onclick="setStatus('${x.id}','authority_ready')">Authority ready</button>`:""}${x.status==="authority_ready"?`<button onclick="setStatus('${x.id}','sent')">Mark sent</button>`:""}</div></article>`}
+async function setStatus(id,status){const note=$("#note-"+id).value;if(!confirm("Status → "+status+" ?"))return;try{await api("/api/admin/status",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({id,status,note})});load()}catch(e){alert(e.message)}}
+check();
+</script></body></html>

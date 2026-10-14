@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>জনতার কণ্ঠ | ঘুষ ও দুর্নীতি রিপোর্টিং</title>
+<meta name="description" content="পরিচয় গোপন রেখে ঘুষ ও দুর্নীতির অভিযোগ জানানো, যাচাই করা এবং প্রয়োজন হলে সংশ্লিষ্ট কর্তৃপক্ষের কাছে পাঠানোর প্ল্যাটফর্ম।">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="/"><span>🇧🇩</span><b>জনতার কণ্ঠ</b><small>ঘুষ ও দুর্নীতির বিরুদ্ধে</small></a>
+  <nav><a href="#feed">অভিযোগ</a><a href="#safety">নিরাপত্তা</a><button class="btn" id="openPost">＋ অভিযোগ করুন</button></nav>
+</header>
+
+<main>
+<section class="hero">
+ <div>
+  <span class="eyebrow">🔒 পরিচয় গোপন রাখার সুযোগ</span>
+  <h1>ঘুষের বিরুদ্ধে<br><em>কথা বলুন।</em></h1>
+  <p>আপনার অভিজ্ঞতা ও প্রমাণ শেয়ার করুন। অভিযোগগুলো moderation-এর মধ্য দিয়ে যাবে; যাচাই করা অভিযোগে আলাদা Verified badge থাকবে।</p>
+  <button class="btn big" id="heroPost">অভিযোগ পোস্ট করুন</button>
+ </div>
+ <div class="heroStats">
+  <div><strong id="statTotal">—</strong><span>মোট অভিযোগ</span></div>
+  <div><strong id="statVerified">—</strong><span>যাচাইকৃত</span></div>
+  <div><strong id="statSent">—</strong><span>কর্তৃপক্ষের কাছে পাঠানো</span></div>
+ </div>
+</section>
+
+<section class="notice"><b>⚠️ মনে রাখুন:</b> একটি অভিযোগ মানেই অপরাধ প্রমাণিত নয়। প্রকাশের আগে ব্যক্তিগত তথ্য সরান এবং শুধু সত্য ও যাচাইযোগ্য তথ্য দিন।</section>
+
+<section class="feedHead" id="feed">
+ <div><h2>সাম্প্রতিক অভিযোগ</h2><p>কমিউনিটির জন্য প্রকাশিত নিরাপদ তথ্য</p></div>
+ <div class="filters"><select id="district"><option value="">সব জেলা</option><option>ঢাকা</option><option>চট্টগ্রাম</option><option>সিলেট</option><option>রাজশাহী</option><option>খুলনা</option><option>বরিশাল</option><option>রংপুর</option><option>ময়মনসিংহ</option></select><select id="status"><option value="">সব স্ট্যাটাস</option><option value="verified">✓ যাচাইকৃত</option></select></div>
+</section>
+<section id="posts" class="posts"><div class="loading">অভিযোগ লোড হচ্ছে…</div></section>
+
+<section class="safety" id="safety">
+<h2>নিরাপদে অভিযোগ করুন</h2>
+<div class="cards"><article><b>১. পরিচয় দেবেন না</b><p>নাম, NID, ব্যক্তিগত ফোন বা ঠিকানা পোস্টে লিখবেন না যদি প্রয়োজন না থাকে।</p></article><article><b>২. প্রমাণ যাচাই করুন</b><p>ছবি/ভিডিওতে অন্যের ব্যক্তিগত তথ্য থাকলে আগে মুছে বা crop করে নিন।</p></article><article><b>৩. অভিযোগ ≠ রায়</b><p>প্ল্যাটফর্মের verification একটি moderation signal; আদালতের রায় নয়।</p></article></div>
+</section>
+</main>
+
+<footer><b>জনতার কণ্ঠ</b><span>Independent reporting platform · সরকারি সংস্থা নয়</span><span>Privacy · Community Rules · Contact</span></footer>
+
+<div class="modal hidden" id="modal">
+ <div class="dialog"><button class="x" id="close">×</button><h2>অভিযোগ পোস্ট করুন</h2><p class="muted">নাম, ফোন ও ইমেইল ছাড়া anonymous report করা যাবে।</p>
+ <form id="form">
+  <label>অভিযোগের ধরন<select name="category" required><option>ঘুষ দাবি</option><option>ঘুষ গ্রহণ</option><option>ঘুষ দিতে বাধ্য করা</option><option>দুর্নীতি / অনিয়ম</option><option>সরকারি সেবা সংক্রান্ত</option><option>অন্যান্য</option></select></label>
+  <label>জেলা<select name="district" required><option>ঢাকা</option><option>চট্টগ্রাম</option><option>সিলেট</option><option>রাজশাহী</option><option>খুলনা</option><option>বরিশাল</option><option>রংপুর</option><option>ময়মনসিংহ</option></select></label>
+  <label>অফিস / প্রতিষ্ঠান<input name="office" maxlength="160"></label>
+  <label>ঘটনার তারিখ<input name="incident_date" type="date"></label>
+  <label>বিস্তারিত<textarea name="body" minlength="30" maxlength="6000" required placeholder="কী ঘটেছে, কোথায়, কখন, কী চাওয়া হয়েছিল—শুধু তথ্যভিত্তিকভাবে লিখুন।"></textarea></label>
+  <label>প্রমাণ <input name="evidence" type="file" multiple accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,application/pdf"></label>
+  <div class="tip">সর্বোচ্চ ৫টি ফাইল; প্রতিটি সর্বোচ্চ ১০ MB। সংযুক্ত প্রমাণ শুধু অ্যাডমিন দেখতে পারবেন।</div>
+  <label class="check"><input type="checkbox" name="anonymous" checked> আমার নাম প্রকাশ করা হবে না</label>
+  <label class="check"><input type="checkbox" required> আমি বুঝেছি যে অভিযোগটি যাচাই না হওয়া পর্যন্ত এটি প্রমাণিত অপরাধ নয়।</label>
+  <label class="check"><input type="checkbox" name="authority_consent"> যাচাইয়ের পর প্রয়োজন হলে সংশ্লিষ্ট কর্তৃপক্ষের কাছে পাঠাতে সম্মতি দিচ্ছি</label>
+  <label>কর্তৃপক্ষ প্রয়োজনে যোগাযোগ করতে পারবে? <input name="contact" maxlength="200" placeholder="ঐচ্ছিক: email/phone"></label>
+  <button class="btn full" type="submit">অভিযোগ জমা দিন</button><div id="formMsg"></div>
+ </form></div>
+</div>
+<script src="/app.js"></script>
+</body></html>
